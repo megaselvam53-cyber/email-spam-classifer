@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Spam Classifier</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4b0082, #7b2cbf, #00b4d8);
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border-radius: 22px;
+            padding: 32px 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            color: white;
+        }
+
+        .icon {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .metrics {
+            font-size: 16px;
+            margin-bottom: 24px;
+            color: #f3e8ff;
+            font-weight: 600;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            border: none;
+            outline: none;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 16px;
+            resize: none;
+            margin-bottom: 18px;
+            background: white;
+            color: #222;
+        }
+
+        textarea::placeholder {
+            color: #888;
+        }
+
+        button {
+            border: none;
+            outline: none;
+            background: linear-gradient(90deg, #ff00c8, #ff4d6d);
+            color: white;
+            padding: 13px 34px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s ease;
+            box-shadow: 0 6px 16px rgba(255, 0, 200, 0.35);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .result-box {
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .safe {
+            background: rgba(46, 204, 113, 0.18);
+            color: #d4ffd4;
+            border: 1px solid rgba(46, 204, 113, 0.45);
+        }
+
+        .spam {
+            background: rgba(255, 77, 109, 0.18);
+            color: #ffd6de;
+            border: 1px solid rgba(255, 77, 109, 0.45);
+        }
+
+        .warning {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255, 193, 7, 0.18);
+            color: #fff3cd;
+            border: 1px solid rgba(255, 193, 7, 0.35);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #f5eaff;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 18px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .result-box {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="icon">📧</div>
+        <h1>Email Spam Classifier</h1>
+        <div class="metrics">
+            Accuracy: {{ accuracy }}% | Precision: {{ precision }}%
+        </div>
+
+        <form action="/predict" method="post">
+            <textarea name="message" placeholder="Enter your email or message here...">{{ message_text }}</textarea>
+            <button type="submit">Analyze Message</button>
+        </form>
+
+        {% if warning %}
+            <div class="warning">{{ warning }}</div>
+        {% endif %}
+
+        {% if show_result %}
+            <div class="result-box {% if 'Spam' in prediction %}spam{% else %}safe{% endif %}">
+                {{ prediction }}
+            </div>
+        {% endif %}
+
+        <div class="footer-text">
+            Detects whether a message is spam or safe using Machine Learning
+        </div>
+    </div>
+
+</body>
+</html>
